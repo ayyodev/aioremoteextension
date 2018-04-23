@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="AioRemoteExtension.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AioRemoteExtension.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:resources="clr-namespace:AioRemoteExtension.Resources"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <resources:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <resources:BooleanToVisibilityConverter x:Key="InvertedBoolToVisibility" True="Collapsed" False="Visible"/>
+        <resources:BooleanToVisibilityConverter x:Key="BoolToVisibility" True="Visible" False="Collapsed"/>
+        <resources:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <materialDesign:Card Padding="32" Margin="16">
+            <StackPanel>
+                <TextBox 
+                    materialDesign:HintAssist.Hint="username" 
+                    Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" 
+                    Visibility="{Binding IsConnected, Converter={StaticResource InvertedBoolToVisibility}}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding ConnectCommand}" Key="Return"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                <TextBox 
+                    materialDesign:HintAssist.Hint="worker name" 
+                    Text="{Binding WorkerName, UpdateSourceTrigger=PropertyChanged}" 
+                    Visibility="{Binding IsConnected, Converter={StaticResource InvertedBoolToVisibility}}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding ConnectCommand}" Key="Return"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                <TextBlock 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibility}}"
+                    >
+                    <resources:ExternalBrowserHyperlink NavigateUri="{Binding DashboardUrl}">
+                        <resources:ExternalBrowserHyperlink.Inlines>
+                            <Run Text="{Binding StatusText}"/>
+                        </resources:ExternalBrowserHyperlink.Inlines>
+                        </resources:ExternalBrowserHyperlink>
+                </TextBlock>
+                <TextBlock Foreground="Red" Text="{Binding ErrorText}" Visibility="{Binding ErrorText, Converter={StaticResource NullToVisibilityConverter}}"/>
+                <Button 
+                    HorizontalAlignment="Right" 
+                    ToolTip="Connect worker" 
+                    Margin="2" 
+                    Command="{Binding ConnectCommand}" 
+                    Visibility="{Binding IsConnected, Converter={StaticResource InvertedBoolToVisibility}}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+                    <Viewbox Width="25" Height="25">
+                        <Canvas Width="23" Height="23">
+                            <Path Data="M13,16V18H14A1,1 0 0,1 15,19H22V21H15A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21H2V19H9A1,1 0 0,1 10,18H11V16H5V14.5C5,12.57 8.13,11 12,11C15.87,11 19,12.57 19,14.5V16H13M12,2A3.5,3.5 0 0,1 15.5,5.5A3.5,3.5 0 0,1 12,9A3.5,3.5 0 0,1 8.5,5.5A3.5,3.5 0 0,1 12,2Z" Fill="White" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+                <local:LoadingView HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}}"/>
+            </StackPanel>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>

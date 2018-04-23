@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:AioRemoteServer.Pages;assembly=AioRemoteServer"
+             xmlns:resources="clr-namespace:AioRemoteExtension.Resources;assembly=AioRemoteServer"
+             x:Class="AioRemoteServer.Pages.DashboardPaged">
+    <!--<ContentPage.BindingContext>
+        <pages:DashboardPageViewModel/>
+    </ContentPage.BindingContext>-->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <resources:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   IsVisible="{Binding AnyWorkersConnected, Converter={StaticResource InverseBooleanConverter}}"
+                   Text="No workers connected. Download and run the client application to connect a worker"
+                   TextColor="#AEA8D3"/>
+            <ListView x:Name="WorkersListView" ItemsSource="{Binding Workers}" HorizontalOptions="CenterAndExpand" BackgroundColor="WhiteSmoke" IsVisible="{Binding AnyWorkersConnected}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout BackgroundColor="WhiteSmoke">
+                                <Label Text="{Binding Name}"/>
+                                <Picker HorizontalOptions="Start" ItemsSource="{Binding AvailableCoins}" 
+                                        SelectedItem="{Binding SelectedCoin}"/>
+                                <Label Text="{Binding GPUs}"/>
+                                <Label Text="{Binding Temps}"/>
+                                <Label Text="{Binding StatusMessage}"/>
+                                <Button HorizontalOptions="Start" Text="Refresh" Command="{Binding BindingContext.RefreshWorkerCommand,
+                                    Source={x:Reference WorkersListView}}"
+                                        CommandParameter="{Binding Id}"/>
+                                <Button Text="Start" Command="{Binding BindingContext.StartMiningCommand,
+                                    Source={x:Reference WorkersListView}}"
+                                        CommandParameter="{Binding Id}"
+                                        IsVisible="{Binding IsMining} "/>
+                                <Button Text="Stop" Command="{Binding BindingContext.StopMiningCommand,
+                                    Source={x:Reference WorkersListView}}"
+                                        CommandParameter="{Binding Id}"
+                                        HorizontalOptions="EndAndExpand"
+                                        IsVisible="{Binding IsMining, Converter={StaticResource InverseBooleanConverter}}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

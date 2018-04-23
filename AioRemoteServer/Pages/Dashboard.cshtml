@@ -1,0 +1,13 @@
+﻿@page
+@using Ooui.AspNetCore
+@using Xamarin.Forms
+@model AioRemoteServer.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+@{
+    var raw = @Model.oouiPage.GetOouiElement();
+    @Html.Raw(new ElementResult(raw));
+}

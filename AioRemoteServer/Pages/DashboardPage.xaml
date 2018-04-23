@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:AioRemoteServer.Pages;assembly=AioRemoteServer"
+             x:Class="AioRemoteServer.Pages.DashboardPage"
+             >
+    <ContentPage.BindingContext>
+        <pages:DashboardPageViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ListView x:Name="WorkersListView" ItemsSource="{Binding Workers}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Name}"/>
+                                <Picker ItemsSource="{Binding AvailableCoins}"/>
+                                <Label Text="{Binding SelectedCoin}"/>
+                                <Label Text="{Binding GPUs}"/>
+                                <Label Text="{Binding Temps}"/>
+                                <Label Text="{Binding MiningStatus}"/>
+                                <Button Text="Refresh" Command="{Binding BindingContext.RefreshWorkerCommand, 
+                                    Source={x:Reference WorkersListView}}"/>
+                                <Button/>
+                                <Button Text="Start" Command="{Binding BindingContext.StartMiningCommand,
+                                    Source={x:Reference WorkersListView}}"/>
+                                <Button Text="Stop" Command="{Binding BindingContext.StopMiningCommand,
+                                    Source={x:Reference WorkersListView}}"/>
+                            </StackLayout>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>
