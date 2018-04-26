@@ -13,6 +13,7 @@ namespace AioRemoteServer.Pages
 {
     public class DashboardPageViewModel : INotifyPropertyChanged
     {
+        private const string NoWorkersConnectedTextContent = "No workers connected. Download the client and connect a worker.";
         private readonly WorkersSession workersSession;
         private readonly string userId;
 
@@ -59,7 +60,11 @@ namespace AioRemoteServer.Pages
             });
         }
 
-        public bool AnyWorkersConnected => this.Workers.Any();
+        private bool anyWorkersConnected;
+        public bool AnyWorkersConnected { get => this.anyWorkersConnected; set { this.anyWorkersConnected = value; OnPropertyChanged(); } }
+
+        private string noWorkersConnectedText;
+        public string NoWorkersConnectedText { get => this.noWorkersConnectedText; set { this.noWorkersConnectedText = value; OnPropertyChanged(); } }
 
 
         //public DashboardPageViewModel()
@@ -73,6 +78,7 @@ namespace AioRemoteServer.Pages
             this.workersSession = session;
 
             this.Workers = new ObservableCollection<WorkerViewModel>();
+            this.noWorkersConnectedText = NoWorkersConnectedTextContent;
 
             foreach (var workersHubClient in this.workersSession.GetWorkersByUserId(this.userId))
             {
@@ -86,7 +92,8 @@ namespace AioRemoteServer.Pages
                 {
                     this.RefreshWorkerCommandExecute(args.Id);
                     this.Workers.Add(new WorkerViewModel(this.workersSession.FindWorkerById(args.Id)));
-                    this.OnPropertyChanged(nameof(this.AnyWorkersConnected));
+                    this.AnyWorkersConnected = this.Workers.Any();
+                    this.NoWorkersConnectedText = string.Empty;
                 }
             };
 
@@ -95,7 +102,8 @@ namespace AioRemoteServer.Pages
                 if (args.UserId == this.userId && this.Workers.Any())
                 {
                     this.Workers.Remove(this.FindWorkerById(args.Id));
-                    this.OnPropertyChanged(nameof(this.AnyWorkersConnected));
+                    this.AnyWorkersConnected = this.Workers.Any();
+                    if (!this.anyWorkersConnected) this.NoWorkersConnectedText = NoWorkersConnectedTextContent;
                 }
             };
         }

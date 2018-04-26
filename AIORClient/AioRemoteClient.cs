@@ -27,6 +27,7 @@ namespace AIORClient
             this.hubConnection.Closed += exception =>
             {
                 this.WorkerDisconnected?.Invoke(new WorkerDisconnectedEventArgs(null, null));
+                return null;
             };
 
             return Task.Run(async () =>

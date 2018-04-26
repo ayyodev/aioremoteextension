@@ -11,7 +11,7 @@ namespace Models
         public string WorkerId { get; }
         public SubscribeMessage SubscribeMessage { get; }
         public string ConnectionId { get; }
-        public List<WorkStatusUpdateMessage> Statuses { get; }
+        public List<WorkStatusUpdateMessage> Statuses { get; private set; }
 
         public WorkStatusUpdateMessage LastStatus =>
             this.Statuses.OrderByDescending(s => s.DateReceived).FirstOrDefault();

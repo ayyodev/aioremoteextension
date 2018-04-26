@@ -76,7 +76,7 @@ namespace AioRemoteServer.Hubs
             var worker = this.FindWorkerById(workerId);
             if (worker != null)
                 await this.workersHubContext.Clients.Client(worker.ConnectionId)
-                    .SendAsync("CommandReceived", command);
+                    .InvokeAsync("CommandReceived", command);
         }
 
 

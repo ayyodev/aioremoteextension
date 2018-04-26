@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div data-vm="DashboardVM">
+    <div data-bind="foreach: Workers">
+        <div class="row">
+            <div class="col-md-3">
+                <span data-bind="text: Name"></span>
+            </div>
+        </div>
+    </div>
+</div>

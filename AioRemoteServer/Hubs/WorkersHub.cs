@@ -35,7 +35,7 @@ namespace AioRemoteServer.Hubs
 
         public async void CommandWorker(WorkerCommandMessage message, string connectionId)
         {
-            await this.Clients.Client(connectionId).SendAsync("CommandReceived", message);
+            await this.Clients.Client(connectionId).InvokeAsync("CommandReceived", message);
         }
     }
 }

@@ -40,12 +40,10 @@ namespace AioRemoteServer.Controllers
             return new ElementResult(page.GetOouiElement());
         }
 
-        //public IActionResult Debug()
-        //{
-        //    var page = new ListViewPage();
-
-        //    return new ElementResult(page.GetOouiElement());
-        //}
+        public IActionResult Debug()
+        {
+            return View("Dashboard");
+        }
 
         //public IActionResult Contact()
         //{

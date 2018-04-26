@@ -16,17 +16,17 @@
         <StackLayout>
             <Label HorizontalOptions="Center"
                    VerticalOptions="Center"
-                   IsVisible="{Binding AnyWorkersConnected, Converter={StaticResource InverseBooleanConverter}}"
-                   Text="No workers connected. Download and run the client application to connect a worker"
+                   IsVisible="{Binding AnyWorkersConnected, Converter={StaticResource InverseBooleanConverter}, UpdateSourceEventName=PropertyChanged}"
+                   Text="{Binding NoWorkersConnectedText}"
                    TextColor="#AEA8D3"/>
             <ListView x:Name="WorkersListView" ItemsSource="{Binding Workers}" HorizontalOptions="CenterAndExpand" BackgroundColor="WhiteSmoke" IsVisible="{Binding AnyWorkersConnected}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout BackgroundColor="WhiteSmoke">
-                                <Label Text="{Binding Name}"/>
+                                <Label Text="{Binding Name, UpdateSourceEventName=PropertyChanged}"/>
                                 <Picker HorizontalOptions="Start" ItemsSource="{Binding AvailableCoins}" 
-                                        SelectedItem="{Binding SelectedCoin}"/>
+                                        SelectedItem="{Binding SelectedCoin, UpdateSourceEventName=PropertyChanged}"/>
                                 <Label Text="{Binding GPUs}"/>
                                 <Label Text="{Binding Temps}"/>
                                 <Label Text="{Binding StatusMessage}"/>

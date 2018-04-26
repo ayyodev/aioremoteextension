@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +8,7 @@ using AioRemoteServer.Data;
 using AioRemoteServer.Hubs;
 using AioRemoteServer.Models;
 using AioRemoteServer.Services;
+using DotNetify;
 
 namespace AioRemoteServer
 {
@@ -37,7 +34,10 @@ namespace AioRemoteServer
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddSingleton<WorkersSession>(new WorkersSession());
+
+            services.AddMemoryCache();
             services.AddSignalR();
+            services.AddDotNetify();
 
             services.AddMvc();
         }
@@ -70,10 +70,15 @@ namespace AioRemoteServer
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+
+            app.UseWebSockets();
             app.UseSignalR(routes =>
             {
-                routes.MapHub<Hubs.WorkersHub>("/WorkersHub");
+                routes.MapDotNetifyHub();
+                routes.MapHub<Hubs.WorkersHub>("WorkersHub");
             });
+
+            app.UseDotNetify();
         }
     }
 }

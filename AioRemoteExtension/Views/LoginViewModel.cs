@@ -14,6 +14,10 @@ using AIORClient;
 using GalaSoft.MvvmLight.Command;
 using Models;
 using Xml2CSharp;
+using System.Collections;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+using AioRemoteExtension.Resources;
 
 namespace AioRemoteExtension.Views
 {
@@ -163,7 +167,7 @@ namespace AioRemoteExtension.Views
                    message.SelectedCoin = controls.avaialableCoinsComboBox.SelectedItem as string;
                }
 
-               message.IsMining = controls.startButton == null;
+               message.IsMining = controls.startButton?.Text ==  "Stop";
 
            });
 
@@ -186,14 +190,12 @@ namespace AioRemoteExtension.Views
                     nvidiaSmi.Start();
                     var responseXml = await nvidiaSmi.StandardOutput.ReadToEndAsync();
                     nvidiaSmi.WaitForExit();
-                    var doc = XDocument.Parse(responseXml);
-                    var result = from s in doc.Descendants()
-                                 select new Nvidia_smi_log();
+                    var result = XElement.Parse(responseXml);
+                    var gpus = result.Elements("gpu").ToList();
 
-                    var nvidiaSmiLogs = result.ToList();
 
-                    message.GPUs = nvidiaSmiLogs.FirstOrDefault()?.Gpu.Select(g => g.Product_name).ToList();
-                    message.Temps = nvidiaSmiLogs.FirstOrDefault()?.Gpu.Select(g => g.Temperature.Gpu_temp).ToList();
+                    message.GPUs = gpus.Select(g => g.Element("product_name").Value).ToList();
+                    message.Temps = gpus.Select(g => g.Element("temperature").Element("gpu_temp").Value).ToList();
                 }
                 catch
                 {
@@ -207,8 +209,7 @@ namespace AioRemoteExtension.Views
 
         private (System.Windows.Forms.Label currentCoinMiningLabel,
             System.Windows.Forms.ComboBox avaialableCoinsComboBox,
-            System.Windows.Forms.Button startButton,
-            System.Windows.Forms.Button stopButton) GetAioControls()
+            System.Windows.Forms.Button startButton) GetAioControls()
         {
             System.Windows.Forms.Label miningLabel = null;
             if (this.aioMiner.Controls.Find("Label13", true).FirstOrDefault()
@@ -225,12 +226,7 @@ namespace AioRemoteExtension.Views
                 is System.Windows.Forms.Button startButton)
                 tempstartButton = startButton;
 
-            System.Windows.Forms.Button tempStopButton = null;
-            if (this.aioMiner.Controls.Find("Button2", false).FirstOrDefault()
-                is System.Windows.Forms.Button stopButton)
-                tempStopButton = stopButton;
-
-            return (miningLabel, tempComboBox, tempstartButton, tempStopButton);
+            return (miningLabel, tempComboBox, tempstartButton);
         }
         private void HookAio()
         {
@@ -249,7 +245,7 @@ namespace AioRemoteExtension.Views
            {
                var controls = this.GetAioControls();
 
-               if (controls.startButton != null)
+               if (controls.startButton?.Text == "Start")
                {
                    controls.avaialableCoinsComboBox.SelectedItem = coin;
                    controls.startButton.PerformClick();
@@ -261,7 +257,8 @@ namespace AioRemoteExtension.Views
         {
             var controls = this.GetAioControls();
 
-            controls.stopButton?.PerformClick();
+            if (controls.startButton?.Text == "Stop")
+                controls.startButton.PerformClick();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
