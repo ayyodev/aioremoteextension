@@ -13,11 +13,6 @@ using AIOminer;
 using AIORClient;
 using GalaSoft.MvvmLight.Command;
 using Models;
-using Xml2CSharp;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using AioRemoteExtension.Resources;
 
 namespace AioRemoteExtension.Views
 {
@@ -143,7 +138,9 @@ namespace AioRemoteExtension.Views
                 case WorkerCommandType.StopMining:
                     this.SendStatusUpdate("Clearing memory...");
                     this.StopMining();
+                    this.SendStatusUpdate("Clearing memory...");
                     Thread.Sleep(2000);
+                    this.SendStatusUpdate("Clearing memory...");
                     this.SendStatusUpdate("Stopped");
                     break;
             }

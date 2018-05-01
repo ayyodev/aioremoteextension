@@ -22,13 +22,15 @@ namespace AioRemoteServer.Models
 
         private ICommand startMiningCommand;
         public ICommand StartMiningCommand => this.startMiningCommand ??
-            (this.startMiningCommand = new Command<string>(StartMiningCommandExecute));
+            (this.startMiningCommand = new Command<WorkerStartMiningMessage>(StartMiningCommandExecute));
 
         private ICommand stopMiningCommand;
         public ICommand StopMiningCommand => this.stopMiningCommand ??
             (this.stopMiningCommand = new Command<string>(StopMiningCommandExecute));
 
         public bool AnyWorkersConnected => this.Workers.Count > 0;
+
+        public string SelectedCoin { get => this.Get<string>(); set => this.Set(value); }
 
         public DashboardVM(WorkersSession workerSession, IPrincipalAccessor principalAccessor)
         {
@@ -91,13 +93,12 @@ namespace AioRemoteServer.Models
             this.UpdateWorkerVM(id);
         }
 
-        private void StartMiningCommandExecute(string id)
+        private void StartMiningCommandExecute(WorkerStartMiningMessage message)
         {
-            var worker = this.FindWorkerById(id);
-            this.workersSession.RequestWorkerCommand(id, new WorkerCommandMessage
+            this.workersSession.RequestWorkerCommand(message.Id, new WorkerCommandMessage
             {
                 CommandType = WorkerCommandType.StartMining,
-                Coin = worker.SelectedCoin,
+                Coin = message.Coin,
                 DateCreated = DateTime.Now
             });
         }

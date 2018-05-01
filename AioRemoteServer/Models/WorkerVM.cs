@@ -14,7 +14,7 @@ namespace AioRemoteServer.Models
 
         public string Name { get => this.Get<string>(); set => this.Set(value); }
         public List<string> AvailableCoins { get => this.Get<List<string>>(); set => this.Set(value); }
-        public string SelectedCoin { get => this.Get<string>(); set { this.Set(value); } }
+        public string SelectedCoin { get => this.Get<string>(); set => this.Set(value); }
         public string StatusText { get => this.Get<string>(); set => this.Set(value); }
         public string Gpus { get => this.Get<string>(); set => this.Set(value); }
         public string Temps { get => this.Get<string>(); set => this.Set(value); }

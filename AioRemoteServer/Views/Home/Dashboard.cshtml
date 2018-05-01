@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -23,7 +22,7 @@
                 <select data-bind="options: AvailableCoins, value: SelectedCoin"></select>
             </div>
             <div class="col-xs-1">
-                <button class="btn btn-primary" type="button" data-bind="vmCommand: {StartMiningCommand: Id}, visible: !IsMining()">
+                <button class="btn btn-primary" type="button" data-bind="vmCommand: StartMining, visible: !IsMining()">
                     Start
                 </button>
                 <button class="btn btn-primary" type="button" data-bind="vmCommand: {StopMiningCommand: Id}, visible: IsMining">
@@ -44,3 +43,22 @@
         </div>
     </div>
 </div>
+@section Scripts{
+<script type="text/javascript">
+    var DashboardVM = (function () {
+        function DashboardVM() {
+
+        };
+
+
+        StartMining = function (data) {
+            var vm = this;
+            var parameters = { Id: data.Id(), Coin: data.SelectedCoin() };
+            vm.StartMiningCommand(parameters);
+        };
+
+        return DashboardVM
+    }())
+
+</script>
+}
