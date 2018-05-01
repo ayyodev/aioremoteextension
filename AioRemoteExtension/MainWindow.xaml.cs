@@ -14,7 +14,7 @@ namespace AioRemoteExtension
         {
             InitializeComponent();
             var aioMiner = new MyMiner();
-            var wih = new WindowInteropHelper(this) {Owner = aioMiner.Handle};
+            //var wih = new WindowInteropHelper(this) {Owner = aioMiner.Handle};
             aioMiner.Show();
             //aioMiner.Hide();
             this.loginWiew.DataContext = new LoginViewModel(aioMiner);

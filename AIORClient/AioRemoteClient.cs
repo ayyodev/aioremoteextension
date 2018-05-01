@@ -27,13 +27,12 @@ namespace AIORClient
             this.hubConnection.Closed += exception =>
             {
                 this.WorkerDisconnected?.Invoke(new WorkerDisconnectedEventArgs(null, null));
-                return null;
             };
 
             return Task.Run(async () =>
             {
                 await this.hubConnection.StartAsync();
-                await this.hubConnection.InvokeAsync("Subscribe", new SubscribeMessage
+                await this.hubConnection.SendAsync("Subscribe", new SubscribeMessage
                 {
                     DateCreated = DateTime.Now,
                     UserId = username,
@@ -44,7 +43,7 @@ namespace AIORClient
 
         public Task SendStatusUpdate(WorkStatusUpdateMessage message)
         {
-            return this.hubConnection.InvokeAsync("AddWorkerStatus", message);
+            return this.hubConnection.SendAsync("AddWorkerStatus", message);
         }
 
         public event WorkerCommandRequestedEvent WorkerCommandRequested;

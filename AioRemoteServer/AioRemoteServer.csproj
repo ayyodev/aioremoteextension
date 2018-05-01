@@ -5,26 +5,14 @@
     <UserSecretsId>aspnet-AioRemoteServer-E574E884-760C-401D-BCFE-304177569235</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Pages\DashboardPage.xaml.cs" />
-  </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Pages\DashboardPage.xaml" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <PackageReference Include="DotNetify.Core" Version="2.3.1-pre" />
-    <PackageReference Include="DotNetify.SignalR" Version="2.3.1-pre" />
+    <PackageReference Include="DotNetify.Core" Version="3.0.0-pre" />
+    <PackageReference Include="DotNetify.SignalR" Version="3.0.0-pre" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-alpha2-final" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-preview2-final" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" PrivateAssets="All" />
-    <PackageReference Include="Ooui" Version="0.10.222" />
-    <PackageReference Include="Ooui.AspNetCore" Version="0.10.222" />
-    <PackageReference Include="Ooui.Forms" Version="0.10.222" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,22 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Include="Pages\DashboardPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Pages\DashboardPaged.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\ListViewPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

@@ -60,9 +60,6 @@ namespace AioRemoteServer
 
             app.UseAuthentication();
 
-            app.UseOoui();
-            Xamarin.Forms.Forms.Init();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -75,7 +72,7 @@ namespace AioRemoteServer
             app.UseSignalR(routes =>
             {
                 routes.MapDotNetifyHub();
-                routes.MapHub<Hubs.WorkersHub>("WorkersHub");
+                routes.MapHub<WorkersHub>("/WorkersHub");
             });
 
             app.UseDotNetify();

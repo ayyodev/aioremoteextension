@@ -1,14 +1,10 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 using AioRemoteServer.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using AioRemoteServer.Models;
-using AioRemoteServer.Pages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using Ooui.AspNetCore;
-using Xamarin.Forms;
 
 namespace AioRemoteServer.Controllers
 {
@@ -29,15 +25,9 @@ namespace AioRemoteServer.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Dashboard()
+        public IActionResult Dashboard()
         {
-            var page = new DashboardPaged
-            {
-                BindingContext = new DashboardPageViewModel(this.workersSession,
-                   (await this.userManager.GetUserAsync(this.HttpContext.User)).UserName)
-            };
-
-            return new ElementResult(page.GetOouiElement());
+            return View();
         }
 
         public IActionResult Debug()

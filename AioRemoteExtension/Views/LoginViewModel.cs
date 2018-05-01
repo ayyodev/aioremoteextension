@@ -24,7 +24,7 @@ namespace AioRemoteExtension.Views
     public class LoginViewModel : INotifyPropertyChanged
     {
         private readonly AioRemoteClient aioClient;
-        private readonly MyMiner aioMiner;
+        private MyMiner aioMiner;
 
         private string currentCoinMining;
 
@@ -95,6 +95,11 @@ namespace AioRemoteExtension.Views
             this.aioMiner = aioMiner;
             this.aioClient = new AioRemoteClient(ConfigurationManager.AppSettings["ServerUrl"]);
             this.aioClient.WorkerCommandRequested += this.ExecuteWorkerCommand;
+            this.UserName = ConfigurationManager.AppSettings["UserName"];
+            this.WorkerName = ConfigurationManager.AppSettings["WorkerName"];
+
+
+            // Temporary reconnect solution hack
             this.aioClient.WorkerDisconnected += args =>
             {
                 Thread.Sleep(15000);
@@ -111,6 +116,7 @@ namespace AioRemoteExtension.Views
                 this.HookAio();
                 this.IsConnected = true;
                 this.StatusText = "Connected to server. Go to the dashboard.";
+                this.SaveConfig();
             }
             catch (Exception ex)
             {
@@ -135,9 +141,9 @@ namespace AioRemoteExtension.Views
                     this.SendStatusUpdate($"Started mining {e.WorkerCommandMessage.Coin}");
                     break;
                 case WorkerCommandType.StopMining:
-                    this.StopMining();
                     this.SendStatusUpdate("Clearing memory...");
-                    Thread.Sleep(5500);
+                    this.StopMining();
+                    Thread.Sleep(2000);
                     this.SendStatusUpdate("Stopped");
                     break;
             }
@@ -147,7 +153,16 @@ namespace AioRemoteExtension.Views
         {
             // fix other thread error for winforms
             var status = await this.GetStatus();
-            status.StatusMessage = messageText;
+
+            if (messageText == null && status.IsMining)
+            {
+                status.StatusMessage = $"Mining {status.SelectedCoin}";
+            }
+            else
+            {
+                status.StatusMessage = messageText;
+            }
+
             await this.aioClient.SendStatusUpdate(status);
         }
 
@@ -167,7 +182,7 @@ namespace AioRemoteExtension.Views
                    message.SelectedCoin = controls.avaialableCoinsComboBox.SelectedItem as string;
                }
 
-               message.IsMining = controls.startButton?.Text ==  "Stop";
+               message.IsMining = controls.startButton?.Text == "Stop";
 
            });
 
@@ -259,6 +274,19 @@ namespace AioRemoteExtension.Views
 
             if (controls.startButton?.Text == "Stop")
                 controls.startButton.PerformClick();
+
+
+            // Long shot but seems to be working. Wow!
+            controls.startButton.Text = "Start";
+        }
+
+        private void SaveConfig()
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["UserName"].Value = this.UserName;
+            config.AppSettings.Settings["WorkerName"].Value = this.WorkerName;
+
+            config.Save(ConfigurationSaveMode.Modified);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

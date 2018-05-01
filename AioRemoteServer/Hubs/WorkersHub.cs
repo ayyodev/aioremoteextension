@@ -30,12 +30,13 @@ namespace AioRemoteServer.Hubs
 
         public void AddWorkerStatus(WorkStatusUpdateMessage message)
         {
+            message.DateReceived = DateTime.Now;
             this.session.AddWorkerStatus(message, this.Context.ConnectionId);
         }
 
         public async void CommandWorker(WorkerCommandMessage message, string connectionId)
         {
-            await this.Clients.Client(connectionId).InvokeAsync("CommandReceived", message);
+            await this.Clients.Client(connectionId).SendAsync("CommandReceived", message);
         }
     }
 }
