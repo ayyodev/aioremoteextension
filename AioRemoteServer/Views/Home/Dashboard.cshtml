@@ -6,7 +6,7 @@
 
 <div data-vm="DashboardVM">
     <div class="well well-sm alert-info" data-bind="visible: !AnyWorkersConnected()">
-        <span>No workers connected. Download the client and connect a worker.</span>
+        <span>No workers connected. <a href="https://github.com/ayyodev/aioremoteextension/releases">Download</a> the client and connect a worker.</span>
     </div>
     <div data-bind="foreach: Workers, vmItemKey: 'Id'">
         <div class="row well well-sm">
