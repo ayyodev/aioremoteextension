@@ -1,6 +1,9 @@
 # aioremoteextension
 This is an open source remote web management server and extension for [AIOMiner](https://aiominer.com)
+
 Check out the first version of the [server](https://aioremoteserverdev.azurewebsites.net).
+
+![Demo](https://raw.githubusercontent.com/ayyodev/aioremoteextension/master/docs/dashboard-screenshot.PNG)
 
 ## Server Stack
 - .NET Core
